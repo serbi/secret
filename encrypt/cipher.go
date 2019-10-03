@@ -28,10 +28,9 @@ func Encrypt(key, plaintext string) (string, error) {
 	}
 
 	stream := cipher.NewCFBEncrypter(block, iv)
-
 	stream.XORKeyStream(ciphertext[aes.BlockSize:], []byte(plaintext))
 
-	return string(ciphertext), nil
+	return fmt.Sprintf("%x", ciphertext), nil
 }
 
 // Decript will take in a key and a ciperHex (hexed representation of the ciphertext) and decrypt it.
@@ -62,7 +61,7 @@ func Decrypt(key, cipherHex string) (string, error) {
 
 func newCipherBlock(key string) (cipher.Block, error) {
 	hasher := md5.New()
-	fmt.Fprint(hasher, key)
+	_, _ = fmt.Fprint(hasher, key)
 	cipherKey := hasher.Sum(nil)
 	return aes.NewCipher(cipherKey)
 }
